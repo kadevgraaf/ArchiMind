@@ -8,8 +8,7 @@ Archimind is a semantic wiki for Software Architecture (SA) documentation manage
 
 ## Requirements ##
 
-PHP
-MySQL or Virtuoso database
+PHP and MySQL or Virtuoso database
 
 ## License ##
 
@@ -18,7 +17,8 @@ License remains the same under ArchiMind adaptations.
 
 ## Installation ##
 
-Please see [Archimind Installation guide.pdf] in root for a detailled guid with pictures. Basic information also below:
+Please see [Archimind Installation guide.pdf](https://github.com/kadevgraaf/ArchiMind/blob/master/Archimind%20Installation%20guide.pdf) in root for a detailled guid with pictures. 
+Basic information also below:
 
 
 ## Installation procedure ##
@@ -81,7 +81,7 @@ The table EF_annotation (Also see Pre-configured SQL (database) dump ef_annotati
 
 ## Usage ##
 
-See [Archimind user guide.pdf] in root
+See [Archimind user guide.pdf](https://github.com/kadevgraaf/ArchiMind/blob/master/Archimind%20user%20guide.pdf) in root
 
 ## references ##
 
