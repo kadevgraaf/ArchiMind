@@ -1,0 +1,22 @@
+<div id="instances_container" class="instances_container">
+<center>Select the class instance that the text contains knowledge about below:</center>
+<div class="closeLink" onclick="Highlight.closeMenu()">
+	<a onclick="javascript:getElementById('instances_container').style.display = 'none'">
+		<img src="<?php echo $this->urlBase ?>extensions/modules/navigation/icon-close.png" />
+	</a>
+</div>
+<?php if($this->instances == false) {?>
+<div class="no_instances">
+<br />
+	<center><font color="red">-There are no instances to which this concept can be related-</font></center>
+</div>
+<?php } else {?>
+<div class="instance_list">
+<?php foreach($this->instances as $instance) {?>	
+	<div class="instance">
+		<a onclick="Highlight.handleAdd('<?php echo $instance['uri']?>', '<?php echo $this->phrase ?>'); Highlight.addTriple('<?php echo $instance['uri']?>'); "><?php echo $instance['label']; ?></a>
+	</div>
+<?php }?>
+</div>
+<?php } ?>
+</div>

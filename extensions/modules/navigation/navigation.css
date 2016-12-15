@@ -1,0 +1,215 @@
+.content h2.navRoot
+{
+    font-size:1em;
+    font-weight:bold;
+}
+
+#navigation .icon { width:0.7em; }
+
+#navigation .icon.icon-arrow-next
+{
+    display:block;
+    font-size:1.5em !important;
+    width:1em; height:1em;
+    position:absolute;
+    right:0;
+    top:50%; margin-top:-0.5em;
+    /*top:0; height:100%;*/
+    background-color:#999;
+    background-image:url(icon-next.png);
+    -moz-border-radius:0.5em; border-radius:0.5em;
+}
+
+#navigation .icon.icon-arrow-previous { background-image:url(icon-previous.png); width:12px; }
+#navigation .icon.icon-arrow-first { background-image:url(icon-first.png); width:8px; }
+
+#navigation .navRoot.fancybuttons .icon.icon-arrow-previous
+{ background-color:#999; width:1.2em; height:1.2em; -moz-border-radius:0.6em; border-radius:0.6em; position:relative; left:-0.25em; }
+#navigation .navRoot.fancybuttons .icon.icon-arrow-first
+{ background-color:#bbb; width:0.9em; height:0.9em; -moz-border-radius:0.45em; border-radius:0.45em; }
+
+/* set contextmenu more left */
+#navigation .has-contextmenus-block li a:hover span.button
+{
+    right:1.75em;
+}
+
+
+#navigation a .icon, #navigation a.icon { opacity:0.4; }
+#navigation a:hover .icon, #navigation a.icon:hover { opacity:0.6; text-decoration:none !important;}
+#navigation a:hover .icon:hover { opacity:1; }
+
+#navigation a span.navDeeperIcon { opacity:0.5; }
+#navigation a span.navDeeperIcon:hover { opacity:1; }
+
+#navigation .has-contextmenus-block li a
+{
+    padding-right:1.75em;
+}
+#navigation-topmenu
+{
+	font-size: 12px;
+	/*width: 285px;	*/
+	z-index: 10000;
+	background-color: white;
+}
+#navigation-topmenu a
+{
+	display: block;
+}
+#navigation-content2
+{
+	font-size: 12px;
+	/*width: 285px;*/
+	z-index: 10000;
+}
+span.highlight
+{
+	background-color: yellow;
+	cursor: pointer;
+}
+div.closeLink
+{
+	display: none;
+}
+#navigation-content2 div.closeLink
+{
+	width: 370px;
+	display: block;
+	background-color: white;
+	z-index: 10002;
+	height: 29px;
+}
+
+div.userMenu
+{
+	display: none;
+}
+
+#navigation-content2 div.userMenu
+{
+	/*width: 285px;*/
+	display: block;
+	background-color: white;
+	z-index: 10002;
+	/*height: 29px;*/
+}
+
+
+
+#navigation-content2 div.usernavigation
+{
+	display: none;
+}
+
+
+
+/*instance container -> for showing instances of classes for possible annotation */
+.instances_container
+{
+	width: 285px;
+}
+.instances_container div.closeLink
+{
+	width: 285px;
+	display: block;
+	background-color: white;
+	z-index: 10002;
+	height: 29px;
+}
+
+.instances_container div.closeLink img
+{
+	float: right;
+	cursor: pointer;
+	margin-right: 2px;
+	margin-top: 2px;
+}
+
+.instances_container
+{
+	position: absolute;
+	top: 300px;
+	left: 400px;
+	z-index: 20000;
+	background-color: white;
+	border: 1px solid grey;
+}
+
+/*instance_details_container -> for showing instances of classes for possible annotation */
+.instance_details_container
+{
+	width: 585px;
+}
+.instance_details_container div.closeLink
+{
+	width: 585px;
+	display: block;
+	background-color: white;
+	z-index: 10002;
+	height: 29px;
+}
+
+.instance_details_container div.closeLink img
+{
+	float: right;
+	cursor: pointer;
+	margin-right: 2px;
+	margin-top: 2px;
+}
+
+.instance_details_container
+{
+	position: absolute;
+	top: 300px;
+	left: 400px;
+	z-index: 20000;
+	background-color: white;
+	border: 1px solid grey;
+}
+
+#navigation-content2 div.closeLink img
+{
+	float: right;
+	cursor: pointer;
+	margin-right: 2px;
+	margin-top: 2px;
+}
+
+#navigation-content2 .Resource
+{
+	width: 240px;
+}
+#navigation-content2 .fancybuttons
+{
+	background-color: white;
+}
+
+#navigation-content .additionButton
+{
+display: none;	
+}
+#navigation-content .annotateheader
+{
+display: none;	
+}
+
+
+#navigation-content2 .additionButton
+{
+	width: 120px;
+	height: 10px;
+	display: block;	
+	z-index: 10001;
+	opacity: 1.0;
+	float: right;
+	margin-top: -18px;
+	margin-right: 5px;
+	cursor: pointer;
+	
+}
+
+#navigation-content2 .even
+{
+	background-color: white;
+}

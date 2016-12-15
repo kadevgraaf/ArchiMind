@@ -1,0 +1,30 @@
+.metadata_form  {
+    border: 1px solid #000;
+    background-color: #eee;
+}
+
+.metadata_form .text-input-label  {
+    width: 80px;
+    display: block;
+    margin-top: 5px;
+    float: left;
+    text-align: right;
+    font-weight: bold;
+}
+
+.metadata_form .text-input  {
+    border: 1px solid #000;
+    width: 50%;
+    max-width: 500px;
+    margin: 5px;
+    font-size: 13px;
+    padding: 3px;
+}
+
+.metadata_form #submit_btn  {
+    margin: 10px 10px 10px 100px;
+}
+
+.metadata_form #cancel_btn  {
+    margin: 10px 10px 10px 10px;
+}

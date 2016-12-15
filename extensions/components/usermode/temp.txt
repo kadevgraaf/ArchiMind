@@ -1,0 +1,21 @@
+<div id="instances_container" class="instances_container">
+Select the concept that the selected text describes
+<div class="closeLink">
+	<a onclick="javascript:getElementById('instances_container').style.display = 'none'">
+		<img src="../../../extensions/modules/navigation/icon-close.png" />
+	</a>
+</div>
+<?php if($this->instances == false) {?>
+<div class="no_instances">
+	There are no instances to which this concept can be related
+</div>
+<?php } else {?>
+<div class="instance_list">
+<?php foreach($this->instances as $instance) {?>	
+	<div class="instance">
+		<a onclick="Highlight.addTriple('<?php echo $instance['uri']?>')"><?php echo $instance['label']?></a>
+	</div>
+<?php }?>
+</div>
+<?php } ?>
+</div>

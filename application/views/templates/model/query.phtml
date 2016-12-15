@@ -1,0 +1,220 @@
+<?php
+
+/**
+ * OntoWiki query template
+ *
+ * @author Norman Heino <norman.heino@gmail.com>
+ * @version $Id: query.phtml 3878 2009-08-01 13:24:35Z jonas.brekle $
+ * @adaptation for predefined queries by Klaas Andries de Graaf <https://github.com/kadevgraaf/> - 27-07-2016 
+ */
+
+?>
+<b>Predefined queries (to execute: press "Add query" and then press "Submit Query"-button in top-right of screen)</b>:
+<?php 
+$this->placeholder('main.window.innerwindows')->append($this->module('sparqloptions'));
+$this->placeholder('main.window.innerwindows')->append($this->module('queryeditorfromsetter'));
+if(class_exists("QuerybuildingHelper") && $this->writeable){
+	$this->placeholder('main.window.innerwindows')->append(
+	        $this->partial('partials/window.phtml', array(
+	                'headinglevel' => 2,
+	                'title'        => $this->_('Save Query'),
+	                'content'      => $this->partial('partials/savepartial.phtml'),
+	                'cssClasses'   => 'queryeditor',
+	                'cssId'        => 'savebox'
+	        ))
+	); 
+}
+?>
+
+<?php
+/*
+<p class="messagebox info"><?php echo $this->_('Predefined namespaces') ?>:
+    <?php $i = 0; ?>
+    <?php foreach ($this->prefixes as $prefix => $namespace): ?>
+        <a href="<?php echo $namespace ?>" 
+           title="<?php echo $namespace ?>"><?php echo $prefix ?></a><?php if (++$i < count($this->prefixes)) echo ', ' ?>
+    <?php endforeach ?>
+</p>
+*/
+?>
+<ul>
+<li>Question 1: List ten development dependencies between implementation units. <input type="button" value="Add query" onclick="predefined(1);"></li>
+<li>Question 2: Which implementation units and decisions are explicitly related to requirement <input id="Q2parameter" type="text" value="Security">?<input type="button" value="Add query" onclick="predefined(2);"></li>
+<li>Question 3: Which architectural patterns are described in the architecture?<input type="button" value="Add query" onclick="predefined(3);"></li>
+<li>Question 4: Which functional requirements are related to non-functional requirement <input id="Q4parameter" type="text" value="Compatability">? <input type="button" value="Add query" onclick="predefined(4);"></li>
+<li>Question 5: Find ten wikipages in which the concerns of the stakeholders are addressed (not just listed).<input type="button" value="Add query" onclick="predefined(5);"></li>
+</ul>
+
+<br />
+
+<fieldset>
+<b>SPARQL Query editor:</b><br />
+    <textarea class="width99 code-input" name="query" id="query"><?php echo $this->query ?></textarea>
+    
+<?php if ($this->has('error')): ?>
+    <fieldset>
+        <div class="messagebox error"><?php echo $this->error ?></div>
+    </fieldset>
+<?php endif; ?>
+
+<?php if (isset($this->data)): ?>
+    <p class="messagebox info">
+        <?php echo sprintf($this->_('Query execution took %1$d ms.'), $this->time) . " Scroll to right if not all result columns are visible on screen." ?>
+    </p>
+    <fieldset>
+        <?php 
+        function hyperlinks($array)
+        {
+	        return array_map("hyperlinks_sub", $array);
+	    }
+	    
+        function hyperlinks_sub($array_element)
+        {
+        	//echo  $array_element;
+        	if (is_numeric(strpos($array_element, "#")))
+        	{
+        		//return $array_element;
+	        	//$array_element = "<a href='" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "http://archimind.nl/archimind/index.php/view/r/uva-sa-ontology%3A" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "http://archimind.nl/archimind/index.php/view/r/ontology1308582601209%3A" , $array_element)) . "' target='_blank'>" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "" , $array_element)) . "</a>";
+	        	return "<a href='" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "http://archimind.nl/archimind/index.php/view/r/uva-sa-ontology%3A" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "http://archimind.nl/archimind/index.php/view/r/ontology1308582601209%3A" , $array_element)) . "' target='_blank'>" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "" , $array_element)) . "</a>";
+        	}
+        	else
+        	{
+        		return $array_element;
+        	}
+        }
+        
+        //print_r($this->data);
+       // for ($item = 0, $size = count($this->data); $item < $size; $item++) {
+        	//echo $this->data[$item] . "<br>";
+	     //   for ($item_sub = 0, $size_sub = count($this->data[$item]); $item_sub < $size_sub; $item_sub++) {
+	        	//echo $item_sub;
+	        	//echo $this->data[$item] . "<br>";
+	        	//echo print_r($this->data[$item]) . "<br>";
+	     		//echo $this->data[$item][$item_sub] . "<br>";
+	     		//echo print_r($this->data[$item][$item_sub]) . "<br>";
+		//	}
+		//}
+        //foreach ($this->data as $array) {
+	    	//echo $value;
+	      //  foreach ($array as $value) {
+	    	//$value = "<a href='" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "http://archimind.nl/archimind/index.php/view/r/uva-sa-ontology%3A" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "http://archimind.nl/archimind/index.php/view/r/ontology1308582601209%3A" , $value)) . "' target='_blank'>" . str_replace("http://www.archimind.org/archimind/UvA-SA-ontology.owl#", "" , str_replace("http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "" , $value)) . "</a>";
+	    	//echo $value . "<br>";
+			//}
+		//}
+        if (is_array($this->data)): ?>
+            <?php 
+ 		      $this->data = array_map("hyperlinks", $this->data);
+             if(class_exists("QuerybuildingHelper")){
+                $result = $this->partial('partials/resultset1.phtml', array('data' => $this->data, 'header' => $this->header, 'caption'=>'Results', 'urlBase' => $this->urlBase));
+                //$result .= str_replace("<td>http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#", "<td><a href="http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#" , $result)
+                //$result .= substr($result, strpos("#"));
+                //echo "<a href='" . $result . "' target='_blank'>" . $result . "</a>";
+                echo $result;
+            } else {
+            	$result = $this->partial('partials/table1.phtml', array('data' => $this->data, 'header' => $this->header));
+            	//$result .= 
+            	//substr($result, strpos("#"));
+            	//echo "<a href='" . $result . "' target='_blank'>" . $result . "</a>";            
+            	echo $result;
+            	}
+            ?>
+        <?php else: ?>
+            <pre><?php echo $this->escape($this->data) ?></pre>
+        <?php endif; ?>
+    </fieldset>
+<?php endif; ?>
+
+
+
+</fieldset>
+
+<script type="text/javascript">
+// make sure jQuery is included
+if (typeof jQuery != 'undefined') {
+    var queryInput = $('.code-input[name=query]');
+
+    function insertModelUri() {
+        queryInput.val(queryInput.val() + '<<?php echo $this->modelUri ?>>');
+    }
+
+    function insertResourceUri() {
+        queryInput.val(queryInput.val() + '<<?php echo $this->resourceUri ?>>');
+    }
+    
+}
+    function predefined(question) {
+    	//=============================Question 1===================
+	    var Q1 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT ?components ?datastores ?p ?impl_units  \n" +
+"WHERE { \n" +
+"{?impl_unit_class RDFS:subClassOf uva-sa-ontology:Architecture . \n" +
+"?impl_units RDF:type ?impl_unit_class . \n" +
+"?components RDF:type uva-sa-ontology:Component . \n" +
+"?impl_units ?p ?components} UNION \n" +
+"{?impl_unit_class RDFS:subClassOf uva-sa-ontology:Architecture . \n" +
+"?impl_units RDF:type ?impl_unit_class .  \n" +
+"?datastores RDF:type uva-sa-ontology:Data_store .  \n" +
+"?impl_units ?p ?datastores } \n" +
+"} \n" +
+"LIMIT 2000";
+		if (question == 1){$('#query').val(Q1);}
+		//=============================Question 2===================
+		var Q2 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT *  \n" +
+"WHERE { \n" +
+"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:results_in ?impl_units} UNION \n" +
+"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:realized_by ?impl_units} UNION \n" +
+"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:depends_on ?decisions}  UNION \n" +
+"{AKontology:"+$('#Q2parameter').val()+" AKontology:addressed_by ?decisions}} \n" +
+"LIMIT 2000";
+		if (question == 2){$('#query').val(Q2);}
+		//=============================Question 3===================
+		var Q3 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT DISTINCT ?uri \n" +
+"WHERE { ?uri RDF:type AKontology:Pattern} \n" +
+"LIMIT 2000";
+		if (question == 3){$('#query').val(Q3);}
+		//=============================Question 4===================
+		var Q4 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT ?FuncReq \n" +
+"WHERE {{?FuncReq RDF:type uva-sa-ontology:Functional_requirement . \n" +
+"?FuncReq ?p AKontology:"+$('#Q4parameter').val()+"} UNION  \n" +
+"{?FuncReq RDF:type uva-sa-ontology:Functional_requirement . \n" +
+"AKontology:"+$('#Q4parameter').val()+" ?p ?FuncReq }} \n" +
+"LIMIT 2000";
+		if (question == 4){$('#query').val(Q4);}
+		//=============================Question 5===================
+		var Q5 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT DISTINCT ?wikipage \n" +
+"WHERE { \n" +
+"?concern RDF:type AKontology:Concern . \n" +
+"?concern uva-sa-ontology:knowledge_is_located_in ?wikipage \n" +
+"} \n" +
+"LIMIT 2000";
+		if (question == 5){$('#query').val(Q5);}
+		//=============================Other queries================
+		var X1 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
+"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
+"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT *  \n" +
+"LIMIT 2000";
+		if (question == 6){$('#query').val(X1);}
+    	//alert('To execute: press "Submit Query"-button in top-right of screen');
+	}
+</script>

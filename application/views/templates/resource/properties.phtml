@@ -1,0 +1,172 @@
+<?php if (isset($this->prePropertiesContent)): ?>
+    <div><?php echo $this->prePropertiesContent; ?></div>    
+<?php endif; ?>
+<?php $flag = false; ?>
+<span about="<?php echo $this->resourceUri ?>" style="display:none" class="about_span"></span>
+<?php if ($this->has('predicates')): ?>
+<?php $odd = true; $current = 0; $graphCount = count($this->graphs) ?>
+<table class="separated-vertical rdfa" about="<?php echo $this->resourceUri ?>"
+    <?php foreach ($this->namespaces as $namespace => $prefix): ?>
+        <?php echo ' xmlns:' . $prefix . '="' . $namespace . '"' ?>
+    <?php endforeach; ?>>
+    
+    <?php foreach ($this->predicates as $graph => $predicatesForGraph): ?>
+        <?php $current++; ?>
+        <?php if (count($this->predicates[$graph]) > 0): /* has resource predicates from graph at all? */ ?>
+            <?php $flag = true; ?>
+        <tbody update:from="<?php echo $graph ?>" id="table-group-<?php echo $current ?>">
+            <?php if (($graphCount > 1) || ($graph != $this->graphUri)): ?>
+                <?php /* show tbody caption only if statements from more than one graph or not from the selected graph */ ?>
+                <tr class="grouptitle">
+                    <th colspan="2">
+                        <a class="toggle"></a>
+                        <?php echo ($graph != $this->graphUri) ? $this->_('Imported from ') : '' ?>
+                        <?php echo $this->graphs[$graph] ?>
+                    </th>
+                </tr>
+            <?php endif; ?>
+        <?php foreach ($predicatesForGraph as $uri => $predicate): ?>
+            <?php $currentPredicate = $this->predicates[$graph][$uri] ?>
+            <tr>
+                <td width="25%">
+					<?php if($currentPredicate['title'] == "rdf:type"){echo "<b>Class</b>";}
+					elseif($currentPredicate['title'] == "rdfs:label"){echo "<b>Name</b>";}
+					else {echo $currentPredicate['title'];} ?>
+                </td>
+                <?php if (count($this->values[$graph][$uri]) > 1): ?>
+                <?php
+                    // if there is at least one resource in this value list -> show list icon
+                    $hasContexMenu = false;
+                    foreach ($this->values[$graph][$uri] as $entry) {
+                         if ($entry['url']) {
+                             $hasContexMenu = true;
+                         }
+                    }
+                ?>
+				<td>
+					<div class="<?php echo $this->editable ? 'editable' : '' ?>  <?php echo $hasContexMenu ? 'has-contextmenu-area' : '' ?>">
+						<?php if ($hasContexMenu): ?>
+							<div class="contextmenu">
+								<a class="item"
+								   href="<?php echo (isset($currentPredicate['has_more_link']) ? $currentPredicate['has_more_link'] : "") ?>">
+									<span class="icon icon-list" title="Show as List">
+										<span>Show as List</span>
+									</span>
+								</a>
+							</div>
+						<?php endif; ?>
+						<ul class="bullets-none">
+							<?php foreach ($this->values[$graph][$uri] as $entry): ?>
+								<?php if ($entry['url']): ?>
+									<li style="line-height: 32px;">
+										<?php if($currentPredicate['title'] == "rdf:type"){if($entry['object'] != "owl:NamedIndividual"){echo "<b>".$entry['object']."</b>";}}
+										else{ ?>
+										<a resource="<?php echo $entry['uri'] ?>" 
+										   rel="<?php echo $currentPredicate['curi'] ?>" 
+										   class="expandable hasMenu" href="<?php echo $entry['url'] ?>"
+										   onClick="Usermode.logSearch('click instance', '<?php echo $entry['object']?>', '<?php echo $currentPredicate['title'] ?>', '', '<?php echo $entry['uri'] ?>', false);">
+										   <?php echo $entry['object'] ?>
+										   </a>
+										   <?php } ?>
+									</li>
+								<?php else: ?>
+									<li property="<?php echo $currentPredicate['curi'] ?>" 
+										content="<?php echo $this->escape($entry['content']) ?>"
+										<?php if (isset($entry['lang']) && !empty($entry['lang'])): ?>
+											xml:lang="<?php echo $entry['lang'] ?>"
+										<?php elseif (isset($entry['datatype']) && !empty($entry['datatype'])): ?>
+											datatype="<?php echo $entry['datatype'] ?>"
+										<?php endif; ?>
+										><?php 
+										echo $entry['object'] 
+									?></li>
+								<?php endif; ?>
+							<?php endforeach; ?>
+							<?php if (isset($currentPredicate['has_more']) && $currentPredicate['has_more']): ?>
+								<a href="<?php echo $currentPredicate['has_more_link'] ?>">[<?php echo $this->_('more') ?>]</a>
+							<?php endif; ?>
+						</ul>
+					</div>
+                </td>
+                <?php else: ?>
+                    <?php $entry = current($this->values[$graph][$uri]) ?>
+				<td>
+					<div class="<?php echo $this->editable ? 'editable' : '' ?>">
+						<?php if ($entry['url']): ?>
+							<?php if ($entry['uri']): ?>
+										<?php if($currentPredicate['title'] == "rdf:type"){if($entry['object'] != "owl:NamedIndividual"){echo "<b>".$entry['object']."</b>";}}
+										else{ ?>
+								<a rel="<?php echo $currentPredicate['curi'] ?>" 
+								   class="expandable hasMenu" 
+								   resource="<?php echo $entry['uri'] ?>" 
+								   href="<?php echo $entry['url'] ?>"
+								   onClick="Usermode.logSearch('click instance', '<?php echo $entry['object']?>', '<?php echo $currentPredicate['title'] ?>', '', '<?php echo $entry['uri'] ?>', false);">
+								   <?php echo $entry['object'] ?>
+								</a>
+										   <?php } ?>
+							<?php else: ?>
+								<a rel="<?php echo $currentPredicate['curi'] ?>" 
+								   href="<?php echo $entry['url'] ?>"><?php echo $entry['object'] ?></a>
+							<?php endif; ?>
+						<?php else: ?>
+							<span property="<?php echo $currentPredicate['curi'] ?>" 
+								  content="<?php echo $this->escape($entry['content']) ?>" 
+								  <?php if (isset($entry['lang']) && !empty($entry['lang'])): ?>
+										xml:lang="<?php echo $entry['lang'] ?>"
+									<?php elseif (isset($entry['datatype']) && !empty($entry['datatype'])): ?>
+									  datatype="<?php echo $entry['datatype'] ?>"
+								  <?php endif; ?>
+							><?php if($currentPredicate['title'] == "rdfs:label"){echo "<b>".$entry['object']."</b>";}else{ echo $entry['object'];} ?></span>
+						<?php endif; ?>
+					</div>
+                </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</table>
+<?php endif; ?>
+<?php if (!$flag): ?>
+    <p class="messagebox info"><?php echo $this->_('No predicates found.') ?></p>
+<?php endif; ?>
+  <div class="metadata_form" style="display: none">
+  <form name="contact" action="post">
+
+<label for="title" id="subject_label" class="text-input-label">Subject</label>
+      <input type="text" name="subject" id="subject" size="30" value="" class="text-input subject" />
+<br/>
+<label for="description" id="description_label" class="text-input-label">Description</label>
+      <input type="text" name="description" id="description" size="30" value="" class="text-input description" />
+<br/>
+      <label for="creator" id="creator_label" class="text-input-label">Creator</label>
+      <input type="text" name="creator" id="creator" size="30" value="" class="text-input creator" />
+<br/>
+
+<label for="publisher" id="description_label" class="text-input-label">Publisher</label>
+      <input type="text" name="publisher" id="publisher" size="30" value="" class="text-input publisher" />
+<br/>
+<label for="type" id="type_label" class="text-input-label">Type</label>
+      <input type="text" name="type" id="type" size="30" value="" class="text-input type" />
+<br/>
+  <label for="source" id="source_label" class="text-input-label">Source</label>
+      <input type="text" name="source" id="source" size="30" value="" class="text-input source" />
+<br/>
+<label for="relation" id="relation_label" class="text-input-label">Relation</label>
+      <input type="text" name="relation" id="relation" size="30" value="" class="text-input relation" />
+<br/>
+<label for="date" id="date_label" class="text-input-label">Date</label>
+      <input type="text" name="date" id="date" size="30" value="" class="text-input date" />
+<br/>
+<label for="format" id="format_label" class="text-input-label">Format</label>
+      <input type="text" name="format" id="format" size="30" value="" class="text-input format" />
+<br/>
+<label for="identifier" id="identifier_label" class="text-input-label">Identifier</label>
+      <input type="text" name="identifier" id="identifier" size="30" value="" class="text-input identifier" />
+<br/>
+      <input type="button" name="submit" class="button submit_btn" id="submit_btn" graph ="<?php echo $this->graphUri ?>"  resource ="<?php echo $this->resourceUri ?>" value="Update document metadata" />
+      <input type="button" name="submit" class="button cancel_btn" id="cancel_btn" value="Cancel" />
+  </form>
+  </div>
+  

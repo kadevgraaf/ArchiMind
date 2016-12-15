@@ -1,0 +1,319 @@
+<?php
+
+/**
+ * OntoWiki navigation entry list template
+ */
+ 
+ $odd = true;
+?>
+
+<?php 
+//echo "test" . $this->mode;
+//klaas -> user menu
+if ($this->mode == "user" && $this->navigationtwo == true)
+{
+?>
+<div>
+    <div class="closeLink" onclick="Highlight.closeMenu()">
+    
+	<a onclick="javascript:getElementById('instance_details_container').style.display = 'none'">
+    	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/modules/navigation/icon-close.png" />
+ 	</a>
+   </div>	
+
+</div>
+
+<div class='usernavigation'>
+
+<!-- <ol class="bullets-none separated">
+    <li> -->
+    
+    <?php if (! (isset($this->showRoot) && $this->showRoot == false) ):?>
+        <h2 class="navRoot fancybuttons">
+        <?php if (isset($this->rootEntry)):?>
+            <a class="navFirst icon icon-arrow-first" title="Go to root level">
+                <span>[Go to root level]</span>
+            </a><a class="navBack icon icon-arrow-previous" title="Go to previous level">
+                <span>[Go to previous level]</span>
+            </a><br/>
+            <a class="hasMenu" href="<?php echo $this->rootEntry['url'] ?>" about="<?php echo $this->rootEntry['uri'] ?>" onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootEntry['title']; ?>', '', '', '<?php echo $this->rootEntry['title']; ?>', false);">
+                <?php echo $this->rootEntry['title'] ?>
+            </a>             
+        <?php else: ?>
+            <?php if ( isset($this->rootName) ){
+                if( isset($this->rootLink) ){
+                   echo '<a class="navigation" href="'.$this->rootLink.'"'; ?> onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootName; ?>', '', '', '<?php echo $this->rootName; ?>', false);" <?php echo '>';
+                   echo $this->rootName;
+                   echo '</a>';
+                }else{
+                    echo $this->rootName;
+                }
+            }else{ ?>
+                <!-- Root -->
+            <?php } ?>
+        <?php endif ?>
+        	
+        </h2>
+    <?php endif ?>
+<!-- </h2> -->
+	
+    <?php if (!empty($this->messages)): ?>
+        <?php foreach ($this->messages as $message): ?>
+        <p class="messagebox <?php echo $message['type'] ?>">
+            <?php echo $message['text'] ?>
+        </p>
+        <?php endforeach; ?>
+    <?php endif ?>
+
+
+    <?php if ($this->entries) :?>
+        <ol class="bullets-none separated has-contextmenus-block">
+  <?php if ($this->mode != "user") { ?>
+           <li class="odd">  
+            <span class="annotateheader"><center> <strong> NAVIGATE & CREATE || </strong></center></span>
+            	<span class="additionButton"><center> <strong> <p style="background-color: #808080"> ANNOTATE </p> </strong></center></span>
+          </li>            
+          <li class="odd"> 
+          </li>            
+<?php } ?>           	
+       <?php foreach ($this->entries as $uri => $entry): ?>
+            <li class="<?php echo $odd ? 'odd' : 'even'; $odd = !$odd; ?>">              
+                <a class="navigation navList"
+                   href="<?php echo $entry['link']; ?>"
+                   onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $entry['title']; ?>', '', '', '<?php echo $entry['title']; ?>', false);"
+                   about="<?php echo $uri ?>" title="show list of instances">
+                   <?php echo $entry['title'] ?>
+
+                   <?php if( $entry['sub'] > 0 ): ?>
+                   <span class="navDeeper navDeeperIcon icon icon-arrow-next" title="show deeper level"><span>[show deeper level]</span></span>
+                   <?php endif ?>
+                   <!-- span class="navList icon icon-list" title="show list of instances">
+                    <span>[show list of instances]</span>
+                   </span -->
+                </a>                
+ <?php if ($this->mode != "user") { ?>
+           	<span onclick="Highlight.showInstances('<?php echo $uri ?>')" class="navigationconten2 additionButton">
+           	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/themes/silverblue/images/icon-annotate.png" />
+           	</span>
+<?php } ?>           	
+           </li>
+            
+        <?php endforeach; ?>
+        </ol>
+    <?php endif; ?>
+
+<?php if ($this->showMeMore) :?>
+<a class="minibutton" href="javascript:navigationEvent ('more', '')" id="naviganion-more"><span class="icon icon-arrow-down"></span> Show Me More</a>
+<?php endif; ?>
+
+<!-- <pre>
+<?php
+        //#print_r($this->setup);
+?>
+</pre> -->
+</div>
+
+<?php
+}  
+else if ($this->navigationtwo == true)
+{ 
+ //klaas -> input menu
+?>
+<!-- <ol class="bullets-none separated">
+    <li> -->
+    
+    <div class="closeLink" onclick="Highlight.closeMenu()">
+    <hr>
+    <strong>Index selected text to knowledge of class/type:</strong>
+	<a onclick="javascript:getElementById('instance_details_container').style.display = 'none'">
+    	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/modules/navigation/icon-close.png" />
+ 	</a>
+    </div>
+
+    <?php if (! (isset($this->showRoot) && $this->showRoot == false) ):?>
+        <h2 class="navRoot fancybuttons">
+        <?php if (isset($this->rootEntry)):?>
+            <a class="navFirst icon icon-arrow-first" title="Go to root level">
+                <span>[Go to root level]</span>
+            </a><a class="navBack icon icon-arrow-previous" title="Go to previous level">
+                <span>[Go to previous level]</span>
+            </a><br/>
+             <a class="hasMenu" href="<?php echo $this->rootEntry['url'] ?>" about="<?php echo $this->rootEntry['uri'] ?>" onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootEntry['title']; ?>', '', '', '<?php echo $this->rootEntry['title']; ?>', false);">
+                <?php echo $this->rootEntry['title'] ?>
+             </a>             
+        <?php else: ?>
+            <?php if ( isset($this->rootName) ){
+                if( isset($this->rootLink) ){
+                   echo '<a class="navigation" href="'.$this->rootLink.'"'; ?> onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootName; ?>', '', '', '<?php echo $this->rootName; ?>', false);" <?php echo '>';
+                   echo $this->rootName;
+                   echo '</a>';
+                }else{
+                    echo $this->rootName;
+                }
+            }else{ ?>
+                <!-- Root -->
+            <?php } ?>
+        <?php endif ?>
+        	
+        </h2>
+    <?php endif ?>
+<!-- </h2> -->
+	
+    <?php if (!empty($this->messages)): ?>
+        <?php foreach ($this->messages as $message): ?>
+        <p class="messagebox <?php echo $message['type'] ?>">
+            <?php echo $message['text'] ?>
+        </p>
+        <?php endforeach; ?>
+    <?php endif ?>
+
+
+    <?php if ($this->entries) :?>
+        <ol class="bullets-none separated has-contextmenus-block">
+ <?php if ($this->mode != "user") { ?>
+           <li class="odd">  
+            <span class="annotateheader"><center> <strong> NAVIGATE & CREATE || </strong></center></span>
+            	<span class="additionButton"><center> <strong> <p style="background-color: #808080"> ANNOTATE </p> </strong></center></span>
+          </li>            
+          <li class="odd"> 
+          </li>            
+<?php } ?>           	
+        <?php foreach ($this->entries as $uri => $entry): ?>
+            <li class="<?php echo $odd ? 'odd' : 'even'; $odd = !$odd; ?>">              
+                <a class="navigation navList" 
+                    href="<?php echo $entry['link']; ?>"
+                    onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $entry['title']; ?>', '', '', '<?php echo $entry['title']; ?>', false);"
+                    about="<?php echo $uri ?>" title="show list of instances">
+                   <?php echo $entry['title'] ?>
+
+                   <?php if( $entry['sub'] > 0 ): ?>
+                   <span class="navDeeper navDeeperIcon icon icon-arrow-next" title="show deeper level"><span>[show deeper level]</span></span>
+                   <?php endif ?>
+                   <!-- span class="navList icon icon-list" title="show list of instances">
+                    <span>[show list of instances]</span>
+                   </span -->
+               </a>                
+<?php if ($this->mode != "user") { ?>
+           	<span onclick="Highlight.showInstances('<?php echo $uri ?>')" class="additionButton">
+           	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/themes/silverblue/images/icon-annotate.png" />
+           	</span>
+<?php } ?>           	
+               
+            </li>
+        <?php endforeach; ?>
+        </ol>
+    <?php endif; ?>
+
+<?php if ($this->showMeMore) :?>
+ <a class="minibutton" href="javascript:navigationEvent ('more', '')" id="naviganion-more"><span class="icon icon-arrow-down"></span> Show Me More</a>
+<?php endif; ?>
+
+<!-- <pre>
+<?php
+        #print_r($this->setup)
+?>
+</pre> -->
+
+ <?php } else { ?>
+
+
+<!-- <ol class="bullets-none separated">
+    <li> -->
+    
+    <div class="closeLink" onclick="Highlight.closeMenu()">
+    <hr>
+    <strong>Index selected text to knowledge of class/type:</strong>
+    <!--<br /> (creates knowledge relations to&from wikipage + highlights phrase on wikipage) -->
+	<a onclick="javascript:getElementById('instance_details_container').style.display = 'none'">
+    	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/modules/navigation/icon-close.png" />
+    	</a>
+    </div>
+
+    <?php if (! (isset($this->showRoot) && $this->showRoot == false) ):?>
+        <h2 class="navRoot fancybuttons">
+        <?php if (isset($this->rootEntry)):?>
+            <a class="navFirst icon icon-arrow-first" title="Go to root level">
+                <span>[Go to root level]</span>
+            </a><a class="navBack icon icon-arrow-previous" title="Go to previous level">
+                <span>[Go to previous level]</span>
+            </a><br/>
+            <a class="hasMenu" href="<?php echo $this->rootEntry['url'] ?>" about="<?php echo $this->rootEntry['uri'] ?>" onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootEntry['title']; ?>', '', '', '<?php echo $this->rootEntry['title']; ?>', false);">
+                <?php echo $this->rootEntry['title'] ?>
+            </a>             
+        <?php else: ?>
+            <?php if ( isset($this->rootName) ){
+                if( isset($this->rootLink) ){
+                   echo '<a class="navigation" href="'.$this->rootLink.'"'; ?> onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $this->rootName; ?>', '', '', '<?php echo $this->rootName; ?>', false);" <?php echo '>';
+                   echo $this->rootName;
+                   echo '</a>';
+                }else{
+                    echo $this->rootName;
+                }
+            }else{ ?>
+                <!-- Root -->
+            <?php } ?>
+        <?php endif ?>
+        	
+        </h2>
+    <?php endif ?>
+<!-- </h2> -->
+	
+    <?php if (!empty($this->messages)): ?>
+        <?php foreach ($this->messages as $message): ?>
+        <p class="messagebox <?php echo $message['type'] ?>">
+            <?php echo $message['text'] ?>
+        </p>
+        <?php endforeach; ?>
+    <?php endif ?>
+
+
+    <?php if ($this->entries) :?>
+        <ol class="bullets-none separated has-contextmenus-block">
+  <?php if ($this->mode != "user") { ?>
+           <li class="odd">  
+            <span class="annotateheader"><center> <strong> NAVIGATE & CREATE || </strong></center></span>
+            	<span class="additionButton"><center> <strong> <p style="background-color: #808080"> ANNOTATE </p> </strong></center></span>
+          </li>            
+          <li class="odd"> 
+          </li>            
+<?php } ?>           	
+       <?php foreach ($this->entries as $uri => $entry): ?>
+            <li class="<?php echo $odd ? 'odd' : 'even'; $odd = !$odd; ?>">              
+                <a class="navigation navList"
+                   href="<?php echo $entry['link']; ?>"
+                   onClick="Diaglog.logSearch('class hierarchy navigation', '<?php echo $entry['title']; ?>', '', '', '<?php echo $entry['title']; ?>', false);"
+                   about="<?php echo $uri ?>" title="show list of instances">
+                   <?php echo $entry['title'] ?>
+
+                   <?php if( $entry['sub'] > 0 ): ?>
+                   <span class="navDeeper navDeeperIcon icon icon-arrow-next" title="show deeper level"><span>[show deeper level]</span></span>
+                   <?php endif ?>
+                   <!-- span class="navList icon icon-list" title="show list of instances">
+                    <span>[show list of instances]</span>
+                   </span -->
+                </a>                
+ <?php if ($this->mode != "user") { ?>
+           	<span onclick="Highlight.showInstances('<?php echo $uri ?>')" class="navigationconten2 additionButton">
+           	<img src="<?php echo str_replace("index.php", "", $this->urlBase ); ?>extensions/themes/silverblue/images/icon-annotate.png" />
+           	</span>
+<?php } ?>           	
+           </li>
+            
+        <?php endforeach; ?>
+        </ol>
+    <?php endif; ?>
+
+<?php if ($this->showMeMore) :?>
+<a class="minibutton" href="javascript:navigationEvent ('more', '')" id="naviganion-more"><span class="icon icon-arrow-down"></span> Show Me More</a>
+<?php endif; ?>
+
+<!-- <pre>
+<?php
+        //#print_r($this->setup);
+?>
+</pre> -->
+ <?php } ?>
+ 
+ 
+ 
+
