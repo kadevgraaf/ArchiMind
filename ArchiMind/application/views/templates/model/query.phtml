@@ -1,5 +1,4 @@
 <?php
-
 /**
  * OntoWiki query template
  *
@@ -9,7 +8,7 @@
  */
 
 ?>
-<b>Predefined queries (to execute: press "Add query" and then press "Submit Query"-button in top-right of screen)</b>:
+<b>Predefined SPARQL queries: </b> <i>(to adapt queries: change query in SPARQL Query editor textbox and press "Submit Query"-button in top-right of screen)</i>
 <?php 
 $this->placeholder('main.window.innerwindows')->append($this->module('sparqloptions'));
 $this->placeholder('main.window.innerwindows')->append($this->module('queryeditorfromsetter'));
@@ -25,7 +24,6 @@ if(class_exists("QuerybuildingHelper") && $this->writeable){
 	); 
 }
 ?>
-
 <?php
 /*
 <p class="messagebox info"><?php echo $this->_('Predefined namespaces') ?>:
@@ -38,14 +36,15 @@ if(class_exists("QuerybuildingHelper") && $this->writeable){
 */
 ?>
 <ul>
-<li>Question 1: List ten development dependencies between implementation units. <input type="button" value="Add query" onclick="predefined(1);"></li>
-<li>Question 2: Which implementation units and decisions are explicitly related to requirement <input id="Q2parameter" type="text" value="Security">?<input type="button" value="Add query" onclick="predefined(2);"></li>
-<li>Question 3: Which architectural patterns are described in the architecture?<input type="button" value="Add query" onclick="predefined(3);"></li>
-<li>Question 4: Which functional requirements are related to non-functional requirement <input id="Q4parameter" type="text" value="Compatability">? <input type="button" value="Add query" onclick="predefined(4);"></li>
-<li>Question 5: Find ten wikipages in which the concerns of the stakeholders are addressed (not just listed).<input type="button" value="Add query" onclick="predefined(5);"></li>
+<li>Question 1: List ten development dependencies between implementation units. <input type="button" value="Query" onclick="predefined(1);"></li>
+<li>Question 2: Which implementation units and decisions are explicitly related to requirement <input id="Q2parameter" type="text" value="Security">?<input type="button" value="Query" onclick="predefined(2);"></li>
+<li>Question 3: Which architectural patterns are described in the architecture?<input type="button" value="Query" onclick="predefined(3);"></li>
+<li>Question 4: Which functional requirements are related to non-functional requirement <input id="Q4parameter" type="text" value="Compatability">? <input type="button" value="Query" onclick="predefined(4);"></li>
+<li>Question 5: Find ten wikipages in which the concerns of the stakeholders are addressed (not just listed).<input type="button" value="Query" onclick="predefined(5);"></li>
+<!--<li>SPARQL query for identifying requirements are not realized by at least one element in the architecture.<input type="button" value="Query" onclick="predefined(6);"></li>
+<li>SPARQL query for identifying which requirements are not yet addressed by a decision.<input type="button" value="Query" onclick="predefined(7);"></li>-->
+<li>SPARQL query for question 3 - Architectural patterns, with additional context, links to wikipages, and links to context information from Linked Open Data on DBpedia.org.<input type="button" value="Query" onclick="predefined(8);"></li>
 </ul>
-
-<br />
 
 <fieldset>
 <b>SPARQL Query editor:</b><br />
@@ -70,6 +69,7 @@ if(class_exists("QuerybuildingHelper") && $this->writeable){
 	    
         function hyperlinks_sub($array_element)
         {
+        	return "<a href='".$array_element . "' target='_blank'>" . $array_element . "</a>";
         	//echo  $array_element;
         	if (is_numeric(strpos($array_element, "#")))
         	{
@@ -144,77 +144,102 @@ if (typeof jQuery != 'undefined') {
 }
     function predefined(question) {
     	//=============================Question 1===================
-	    var Q1 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var Q1 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT ?components ?datastores ?p ?impl_units  \n" +
 "WHERE { \n" +
-"{?impl_unit_class RDFS:subClassOf uva-sa-ontology:Architecture . \n" +
-"?impl_units RDF:type ?impl_unit_class . \n" +
-"?components RDF:type uva-sa-ontology:Component . \n" +
+"{?impl_unit_class rdfs:subClassOf AKO:Architecture . \n" +
+"?impl_units rdf:type ?impl_unit_class . \n" +
+"?components rdf:type AKO:Component . \n" +
 "?impl_units ?p ?components} UNION \n" +
-"{?impl_unit_class RDFS:subClassOf uva-sa-ontology:Architecture . \n" +
-"?impl_units RDF:type ?impl_unit_class .  \n" +
-"?datastores RDF:type uva-sa-ontology:Data_store .  \n" +
+"{?impl_unit_class rdfs:subClassOf AKO:Architecture . \n" +
+"?impl_units rdf:type ?impl_unit_class .  \n" +
+"?datastores rdf:type AKO:Data_store .  \n" +
 "?impl_units ?p ?datastores } \n" +
 "} \n" +
 "LIMIT 2000";
 		if (question == 1){$('#query').val(Q1);}
 		//=============================Question 2===================
-		var Q2 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var Q2 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT *  \n" +
 "WHERE { \n" +
-"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:results_in ?impl_units} UNION \n" +
-"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:realized_by ?impl_units} UNION \n" +
-"{AKontology:"+$('#Q2parameter').val()+" uva-sa-ontology:depends_on ?decisions}  UNION \n" +
-"{AKontology:"+$('#Q2parameter').val()+" AKontology:addressed_by ?decisions}} \n" +
+"{AKO:"+$('#Q2parameter').val()+" AKO:results_in ?impl_units} UNION \n" +
+"{AKO:"+$('#Q2parameter').val()+" AKO:realized_by ?impl_units} UNION \n" +
+"{AKO:"+$('#Q2parameter').val()+" AKO:depends_on ?decisions}  UNION \n" +
+"{AKO:"+$('#Q2parameter').val()+" AKO:addressed_by ?decisions}} \n" +
 "LIMIT 2000";
 		if (question == 2){$('#query').val(Q2);}
 		//=============================Question 3===================
-		var Q3 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var Q3 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT DISTINCT ?uri \n" +
-"WHERE { ?uri RDF:type AKontology:Pattern} \n" +
+"WHERE { ?uri rdf:type AKO:Pattern} \n" +
 "LIMIT 2000";
 		if (question == 3){$('#query').val(Q3);}
 		//=============================Question 4===================
-		var Q4 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var Q4 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT ?FuncReq \n" +
-"WHERE {{?FuncReq RDF:type uva-sa-ontology:Functional_requirement . \n" +
-"?FuncReq ?p AKontology:"+$('#Q4parameter').val()+"} UNION  \n" +
-"{?FuncReq RDF:type uva-sa-ontology:Functional_requirement . \n" +
-"AKontology:"+$('#Q4parameter').val()+" ?p ?FuncReq }} \n" +
+"WHERE {{?FuncReq rdf:type uva-sa-ontology:Functional_requirement . \n" +
+"?FuncReq ?p AKO:"+$('#Q4parameter').val()+"} UNION  \n" +
+"{?FuncReq rdf:type AKO:Functional_requirement . \n" +
+"AKO:"+$('#Q4parameter').val()+" ?p ?FuncReq }} \n" +
 "LIMIT 2000";
 		if (question == 4){$('#query').val(Q4);}
 		//=============================Question 5===================
-		var Q5 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var Q5 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT DISTINCT ?wikipage \n" +
 "WHERE { \n" +
-"?concern RDF:type AKontology:Concern . \n" +
-"?concern uva-sa-ontology:knowledge_is_located_in ?wikipage \n" +
+"?concern rdf:type AKO:Concern . \n" +
+"?concern AKO:knowledge_is_located_in ?wikipage \n" +
 "} \n" +
 "LIMIT 2000";
 		if (question == 5){$('#query').val(Q5);}
+		//=============================requirements realized by architecture===================
+		var D1 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT ?Req ?AKelement \n" +
+"WHERE {{?Req rdf:type AKO:Functional_Requirement}  \n" +
+"UNION {?Req rdf:type AKO:Non_functional_requirement }  \n" +
+"OPTIONAL {?Req AKO:realized_by ?AKelement} .  \n" +
+"FILTER(!bound(?AKelement))} \n" ;
+		if (question == 6){$('#query').val(D1);}
+		//=============================decisions not realized===================
+		var D2 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT ?Req ?decision \n" +
+"WHERE {{?Req rdf:type AKO:Functional_Requirement}  \n" +
+"UNION {?Req rdf:type AKO:Non_functional_requirement }  \n" +
+"OPTIONAL{?Req AKO:addressed_by ?decision}. \n" +
+"FILTER(!bound(?decision))} \n" ;
+		if (question == 7){$('#query').val(D2);}
+		//=============================Question 3 - patterns with context - LOD===================
+		var D3 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+"SELECT * \n" +
+"WHERE { ?uri rdf:type AKO:Pattern .  \n" +
+"?uri AKO:description ?description .  \n" +
+"?uri AKO:knowledge_is_located_in ?wikipage .  \n" +
+"?uri rdf:seeAlso ?DBpedia}  \n" ;
+		if (question == 8){$('#query').val(D3);}		
 		//=============================Other queries================
-		var X1 = "PREFIX AKontology: <http://www.semanticweb.org/ontologies/2011/5/Ontology1308582601209.owl#> \n" +
-"PREFIX uva-sa-ontology: <http://www.archimind.org/archimind/UvA-SA-ontology.owl#> \n" +
-"PREFIX RDF: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
-"PREFIX RDFS: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+		var X1 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:> \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
 "SELECT *  \n" +
 "LIMIT 2000";
-		if (question == 6){$('#query').val(X1);}
+		if (question == 60){$('#query').val(X1);}
     	//alert('To execute: press "Submit Query"-button in top-right of screen');
+    	$('.submit').click();
 	}
 </script>
