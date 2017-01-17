@@ -32,6 +32,10 @@ WHERE { ?uri rdf:type AKO:Pattern .
 ?uri rdf:seeAlso ?DBpedia}";
 }
 
+$result = sparql_query($query);
+$fields = sparql_field_array($result);
+
+
 //echo $_GET['query'];
 
 ?>
@@ -138,13 +142,140 @@ WHERE { ?uri rdf:type AKO:Pattern .
 "SELECT *  \n" +
 "LIMIT 2000";
 		if (question == 60){$('#query').val(X1);}
+		
+		
+		//=============================CASE 1================
+var CASE1 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:>  \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n" +
+"SELECT DISTINCT ?requirement ?req_name  \n" +
+"WHERE  \n" +
+"{AKO:Business_rules_engine AKO:satisfies ?requirement .  \n" +
+"?requirement rdfs:label ?req_name} ";
+	if (question == 10){$('#case').val('reqs1'); $('#query').val(CASE1);}
+		
+		//=============================CASE 2================
+var CASE2 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:>   \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>   \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>   \n" +
+"SELECT DISTINCT ?decision ?dec_name   \n" +
+"WHERE   \n" +
+"{?decision AKO:decision_is_about AKO:Business_rules_engine .   \n" +
+"?decision rdfs:label ?dec_name}  ";
+	if (question == 11){$('#case').val('decs1'); $('#query').val(CASE1);}
+		
+		//=============================CASE 3================
+var CASE3 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:>  \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \n" +
+"SELECT DISTINCT ?requirement ?req_name  \n" +
+"WHERE  \n" +
+"{AKO:Transformer AKO:satisfies ?requirement .  \n" +
+"?requirement rdfs:label ?req_name} ";
+	if (question == 12){$('#case').val('reqs2'); $('#query').val(CASE3);}
+		
+		//=============================CASE 4================
+var CASE4 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl:>   \n" +
+"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>   \n" +
+"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>   \n" +
+"SELECT DISTINCT ?decision ?dec_name   \n" +
+"WHERE   \n" +
+"{?decision AKO:decision_is_about AKO:Transformer .   \n" +
+"?decision rdfs:label ?dec_name}  ";
+	if (question == 13){$('#case').val('decs2'); $('#query').val(CASE4);}
+	
+
+		//=============================execute================
     	//alert('To execute: press "Submit Query"-button in top-right of screen');
     	$('.submit').click();
 	}
 </script>
 </head>
-<center><h1>ArchiMind SPARQL query endpoint demo  - Architecture Documentation Review</h1></center>
 <body>
+<center><h1>ArchiMind SPARQL query endpoint demo  - Architecture Documentation Review</h1></center>
+<h2>CASE tool example</h2>
+<b>Tasks</b> <br />
+<ul>
+<li>Implement component Business rules engine 
+<?php 
+if ($_POST['case'] == 'reqs1'){
+	echo " - [Related requirements in ArchiMind: ";
+		while($row = sparql_fetch_array($result))
+		{
+		  foreach($fields as $field)
+		  {
+			  if(strpos($row[$field], "ttp:") !== false)
+			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+			  else
+			  {echo $row[$field] . "</a>, ";}
+		    //print"$row[$field] <br\>";
+		  }
+		}
+		echo '] - <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a> </li>';
+}
+else if ($_POST['case'] == 'decs1'){
+	echo ' - <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> - [Related decisions in ArchiMind: ';
+		while($row = sparql_fetch_array($result))
+		{
+		  foreach($fields as $field)
+		  {
+			  if(strpos($row[$field], "ttp:") !== false)
+			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+			  else
+			  {echo $row[$field] . "</a>, ";}
+		    //print"$row[$field] <br\>";
+		  }
+		}
+		echo '] </li>';
+}
+else{
+	echo ' - <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> - <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a> </li>';
+}
+?>
+
+<li>Implement component Transformer (business)
+<?php 
+if ($_POST['case'] == 'reqs2'){
+	echo " - [Related requirements in ArchiMind: ";
+		while($row = sparql_fetch_array($result))
+		{
+		  foreach($fields as $field)
+		  {
+			  if(strpos($row[$field], "ttp:") !== false)
+			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+			  else
+			  {echo $row[$field] . "</a>, ";}
+		    //print"$row[$field] <br\>";
+		  }
+		}
+		echo '] - <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a> </li>';
+}
+else if ($_POST['case'] == 'decs2'){
+	echo ' - <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> - [Related decisions in ArchiMind: ';
+		while($row = sparql_fetch_array($result))
+		{
+		  foreach($fields as $field)
+		  {
+			  if(strpos($row[$field], "ttp:") !== false)
+			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+			  else
+			  {echo $row[$field] . "</a>, ";}
+		    //print"$row[$field] <br\>";
+		  }
+		}
+		echo '] </li>';
+}
+else{
+	echo ' - <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> - <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a> </li>';
+}
+?>
+
+</ul>
+
+<br />
+<br />
+<br />
+<h2>Predefined queries and SPARQL Query Editor - similar to UI in ArchiMind</h2>
 <b>Predefined SPARQL queries: </b> <i>(to adapt queries: change query in SPARQL Query editor textbox and press "Submit Query"-button in top-right of screen)</i>
 <ul>
 <li>Question 1: List ten development dependencies between implementation units. <input type="button" value="Query" onclick="predefined(1);"></li>
@@ -160,15 +291,18 @@ WHERE { ?uri rdf:type AKO:Pattern .
 <form action="query.php" method="POST">
 <textarea rows="15" cols="150" name="query" id="query"><?php echo $_POST['query'];?></textarea>
 <br/>
+<input type="hidden" type="text" id="case" name="case">
 <input class="submit" type="submit" id="submit" name="submit" value="submit">
 <b><a href='http://softcode.nl/querytool/query.php'>refresh</a></b>
 </form>
 </center>
 <?php
 
-
-$result = sparql_query($query);
-$fields = sparql_field_array($result);
+if($_POST['case'] == 'decs1' || $_POST['case'] == 'reqs1' || $_POST['case'] == 'decs2' || $_POST['case'] == 'reqs2')
+{
+	$result = sparql_query($query);
+	$fields = sparql_field_array($result);
+}
 
 print "<p>Number of results: ".sparql_num_rows( $result )." results.</p>";
 print "<table class='example_table' border='1'>";
@@ -191,6 +325,7 @@ while( $row = sparql_fetch_array( $result ) )
 	print "</tr>";
 }
 print "</table>";
+/*
 while($row = sparql_fetch_array($result))
 {
   foreach($fields as $field)
@@ -202,6 +337,7 @@ while($row = sparql_fetch_array($result))
     //print"$row[$field] <br\>";
   }
 }
+*/
 ?>
 
 
