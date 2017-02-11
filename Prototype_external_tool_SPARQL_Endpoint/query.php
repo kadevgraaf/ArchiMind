@@ -1,14 +1,20 @@
 <?php
 /*
-reused from http://graphite.ecs.soton.ac.uk/sparqllib/
+Code snippets adapted from http://graphite.ecs.soton.ac.uk/sparqllib/
 
-sparqllib.php
+Use of sparqllib.php
 
 Simple library to query SPARQL from PHP.
 
 ©2010-12 Christopher Gutteridge, University of Southampton.
 
 Under LGPL license
+*/
+/*
+Note Author (Klaas Andries de Graaf):
+Querys and data is often hardcoded (not dynamic from e.g. CASE tool database) with examples 
+to allow for easy understanding of code. 
+Making this fully dynamic + linking it to database/code repository is easy, but introduces more complex code to read for reviewers.
 */
 require_once('sparqllib.php');
 //$db = sparql_connect('http://dbpedia.org/sparql');
@@ -193,7 +199,7 @@ var CASE4 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/
 </head>
 <body>
 <center><h1>ArchiMind SPARQL query endpoint demo  - Architecture Documentation Review</h1></center>
-<div <div style="background-color: lightgreen;">
+<div id='casediv' style="background-color: lightgreen;">
 <h2>CASE tool example</h2>
 <b>Tasks</b> <br />
 <ul>
@@ -316,7 +322,7 @@ else{
 </li>
 </ul>
 </div>
-<div style="background-color: lightblue;">
+<div id='editordiv' style="background-color: lightblue;">
 <br />
 <h2>Predefined queries and SPARQL Query Editor - similar to UI in ArchiMind</h2>
 <b>Predefined SPARQL queries: </b> <i>(to adapt queries: change query in SPARQL Query editor textbox and press "Submit Query"-button in top-right of screen)</i>
@@ -332,11 +338,10 @@ else{
 </ul>
 <center>
 <form action="query.php" method="POST">
-<textarea rows="15" cols="150" name="query" id="query"><?php echo $_POST['query'];?></textarea>
+<textarea rows="15" cols="100" name="query" id="query"><?php echo $_POST['query'];?></textarea>
 <br/>
 <input type="hidden" type="text" id="case" name="case">
 <input class="submit" type="submit" id="submit" name="submit" value="submit">
-<b><a href='http://softcode.nl/querytool/query.php'>refresh</a></b>
 </form>
 </center>
 <?php
@@ -382,7 +387,35 @@ while($row = sparql_fetch_array($result))
 }
 */
 ?>
+<b><a id='refresh' href='http://softcode.nl/querytool/query.php'>refresh</a></b>
 </div>
+<?php 
+//echo $_POST['case'];
+//echo $_POST['query'];
+if($_POST['case'] != '')
+{
+//	echo "test";
+	?>
+<script type="text/javascript">
+$(function() {
+	//alert('test');
+	$("#casediv").focus();
+});
+</script>
+<?php
+} else if($_POST['query'] != '')
+{
+	
+?>
+<script type="text/javascript">
+$(function() {
+	//alert('test1');
+	$("#refresh").focus();
+});
+</script>
+<?php
+}
+?>
 
 </body>
 
