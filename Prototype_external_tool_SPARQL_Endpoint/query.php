@@ -193,87 +193,130 @@ var CASE4 = "PREFIX AKO: <http://www.archimind.nl/archimindLOD/index.php/view/r/
 </head>
 <body>
 <center><h1>ArchiMind SPARQL query endpoint demo  - Architecture Documentation Review</h1></center>
+<div <div style="background-color: lightgreen;">
 <h2>CASE tool example</h2>
 <b>Tasks</b> <br />
 <ul>
-<li>Implement component Business rules engine 
+<li>Implement component <b>Business rules engine</b> (<a href='http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ABusiness_rules_engine' target='_blank'>See knowledge in ArchiMind</a>)
 <?php 
 if ($_POST['case'] == 'reqs1'){
-	echo " - [Related requirements in ArchiMind: ";
-		while($row = sparql_fetch_array($result))
+	echo " <br \>- [Related requirements in ArchiMind: ";
+		if (sparql_num_rows( $result ) > 0)
 		{
-		  foreach($fields as $field)
-		  {
-			  if(strpos($row[$field], "ttp:") !== false)
-			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
-			  else
-			  {echo $row[$field] . "</a>, ";}
-		    //print"$row[$field] <br\>";
-		  }
+			while($row = sparql_fetch_array($result))
+			{
+			  foreach($fields as $field)
+			  {
+				  if(strpos($row[$field], "ttp:") !== false)
+				  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+				  else
+				  {echo $row[$field] . "</a>, ";}
+			    //print"$row[$field] <br\>";
+			  }
+			}
 		}
-		echo '] - <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a> </li>';
+		else
+		{
+			echo '<b>ARCHITECTURAL RULE VIOLATION - NO RELATED REQUIREMENTS <a href="http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ABusiness_rules_engine" target="_blank">Change</a></b>';
+		}
+
+		echo '] <br \>- <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a>';
 }
 else if ($_POST['case'] == 'decs1'){
-	echo ' - <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> - [Related decisions in ArchiMind: ';
-		while($row = sparql_fetch_array($result))
+	echo ' <br \>- <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> <br \>- [Related decisions in ArchiMind: ';
+		if (sparql_num_rows( $result ) > 0)
 		{
-		  foreach($fields as $field)
-		  {
-			  if(strpos($row[$field], "ttp:") !== false)
-			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
-			  else
-			  {echo $row[$field] . "</a>, ";}
-		    //print"$row[$field] <br\>";
-		  }
+			while($row = sparql_fetch_array($result))
+			{
+			  foreach($fields as $field)
+			  {
+				  if(strpos($row[$field], "ttp:") !== false)
+				  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+				  else
+				  {echo $row[$field] . "</a>, ";}
+			    //print"$row[$field] <br\>";
+			  }
+			}
 		}
-		echo '] </li>';
+		else
+		{
+			echo '<b>ARCHITECTURAL RULE VIOLATION - NO RELATED DECISIONS <a href="http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ABusiness_rules_engine" target="_blank">Change</a></b>';
+		}
+		echo '] ';
 }
 else{
-	echo ' - <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> - <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a> </li>';
+	echo ' <br \>- <a href="#" onclick="predefined(10);">[find related requirements in ArchiMind]</a> <br \>- <a href="#" onclick="predefined(11);">[find related decisions in ArchiMind]</a>';
 }
 ?>
-
-<li>Implement component Transformer (business)
+<br \>[Link to code repository] [Link to JIRA project planning]
+<br \>[Notes:]
+<textarea rows="3" cols="40" name="notes" id="notes">Get rules from business stakeholders. Check with finance.</textarea>
+[comments:]
+<textarea rows="3" cols="40" name="notes" id="notes">Goes in release 3.01.x.</textarea>
+[Reply]<br \>
+<br \>
+</li>
+<li>Implement component <b>Transformer (business)</b> (<a href='http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ATransformer' target='_blank'>See knowledge in ArchiMind</a>)
 <?php 
 if ($_POST['case'] == 'reqs2'){
-	echo " - [Related requirements in ArchiMind: ";
-		while($row = sparql_fetch_array($result))
+	echo " <br \>- [Related requirements in ArchiMind: ";
+		if (sparql_num_rows( $result ) > 0)
 		{
-		  foreach($fields as $field)
-		  {
-			  if(strpos($row[$field], "ttp:") !== false)
-			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
-			  else
-			  {echo $row[$field] . "</a>, ";}
-		    //print"$row[$field] <br\>";
-		  }
+			while($row = sparql_fetch_array($result))
+			{
+			  foreach($fields as $field)
+			  {
+				  if(strpos($row[$field], "ttp:") !== false)
+				  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+				  else
+				  {echo $row[$field] . "</a>, ";}
+			    //print"$row[$field] <br\>";
+			  }
+			}
 		}
-		echo '] - <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a> </li>';
+		else
+		{
+			echo '<b>ARCHITECTURAL RULE VIOLATION - NO RELATED REQUIREMENTS <a href="http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ATransformer" target="_blank">Change</a>]</b>';
+		}
+
+		echo '] <br \> - <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a>';
 }
 else if ($_POST['case'] == 'decs2'){
-	echo ' - <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> - [Related decisions in ArchiMind: ';
-		while($row = sparql_fetch_array($result))
+	echo ' <br \>- <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> <br \>- [Related decisions in ArchiMind: ';
+		if (sparql_num_rows( $result ) > 0)
 		{
-		  foreach($fields as $field)
-		  {
-			  if(strpos($row[$field], "ttp:") !== false)
-			  {echo "<a href='".$row[$field] . "' target='_blank'>";}
-			  else
-			  {echo $row[$field] . "</a>, ";}
-		    //print"$row[$field] <br\>";
-		  }
+			while($row = sparql_fetch_array($result))
+			{
+			  foreach($fields as $field)
+			  {
+				  if(strpos($row[$field], "ttp:") !== false)
+				  {echo "<a href='".$row[$field] . "' target='_blank'>";}
+				  else
+				  {echo $row[$field] . "</a>, ";}
+			    //print"$row[$field] <br\>";
+			  }
+			}
 		}
-		echo '] </li>';
+		else
+		{
+			echo '<b>ARCHITECTURAL RULE VIOLATION - NO RELATED DECISIONS <a href="http://www.archimind.nl/archimindLOD/index.php/view/r/sadocontology1.owl%3ATransformer" target="_blank">Change</a></b>';
+		}
+		echo ']';
 }
 else{
-	echo ' - <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> - <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a> </li>';
+	echo ' <br \>- <a href="#" onclick="predefined(12);">[find related requirements in ArchiMind]</a> <br \>- <a href="#" onclick="predefined(13);">[find related decisions in ArchiMind]</a>';
 }
 ?>
-
+<br \>[Link to code repository] [Link to JIRA project planning]
+<br \>[Notes]
+<textarea rows="5" cols="40" name="notes" id="notes">Transformation in DL.</textarea>
+[comments:]
+<textarea rows="5" cols="40" name="notes" id="notes">Goes in release 2.02.x.</textarea>
+[Reply]
+</li>
 </ul>
-
-<br />
-<br />
+</div>
+<div style="background-color: lightblue;">
 <br />
 <h2>Predefined queries and SPARQL Query Editor - similar to UI in ArchiMind</h2>
 <b>Predefined SPARQL queries: </b> <i>(to adapt queries: change query in SPARQL Query editor textbox and press "Submit Query"-button in top-right of screen)</i>
@@ -339,7 +382,7 @@ while($row = sparql_fetch_array($result))
 }
 */
 ?>
-
+</div>
 
 </body>
 
